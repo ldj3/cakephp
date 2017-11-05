@@ -116,7 +116,7 @@ class RequestHandlerComponentTest extends TestCase
             ->getMock();
         $collection = new ComponentRegistry($controller);
         $requestHandler = new RequestHandlerComponent($collection, $config);
-        $this->assertEquals(['json' => 'MyPlugin.MyJson'], $requestHandler->config('viewClassMap'));
+        $this->assertEquals(['json' => 'MyPlugin.MyJson'], $requestHandler->getConfig('viewClassMap'));
     }
 
     /**
@@ -327,7 +327,7 @@ class RequestHandlerComponentTest extends TestCase
     {
         $restore = error_reporting(E_ALL & ~E_USER_DEPRECATED);
 
-        $this->RequestHandler->config(['viewClassMap' => ['json' => 'CustomJson']]);
+        $this->RequestHandler->setConfig(['viewClassMap' => ['json' => 'CustomJson']]);
         $this->RequestHandler->initialize([]);
         $result = $this->RequestHandler->viewClassMap();
         $expected = [
@@ -589,7 +589,7 @@ class RequestHandlerComponentTest extends TestCase
 
         $event = new Event('Controller.startup', $this->Controller);
         $this->RequestHandler->initialize([]);
-        $this->RequestHandler->config('enableBeforeRedirect', false);
+        $this->RequestHandler->setConfig('enableBeforeRedirect', false);
         $this->RequestHandler->startup($event);
         $this->assertNull($this->RequestHandler->beforeRedirect($event, '/posts/index', $this->Controller->response));
     }
@@ -1232,7 +1232,7 @@ class RequestHandlerComponentTest extends TestCase
     public function testConstructDefaultOptions()
     {
         $requestHandler = new RequestHandlerComponent($this->Controller->components());
-        $viewClass = $requestHandler->config('viewClassMap');
+        $viewClass = $requestHandler->getConfig('viewClassMap');
         $expected = [
             'json' => 'Json',
             'xml' => 'Xml',
@@ -1240,7 +1240,7 @@ class RequestHandlerComponentTest extends TestCase
         ];
         $this->assertEquals($expected, $viewClass);
 
-        $inputs = $requestHandler->config('inputTypeMap');
+        $inputs = $requestHandler->getConfig('inputTypeMap');
         $this->assertArrayHasKey('json', $inputs);
         $this->assertArrayHasKey('xml', $inputs);
     }
@@ -1259,13 +1259,13 @@ class RequestHandlerComponentTest extends TestCase
                 'inputTypeMap' => ['json' => ['json_decode', true]]
             ]
         );
-        $viewClass = $requestHandler->config('viewClassMap');
+        $viewClass = $requestHandler->getConfig('viewClassMap');
         $expected = [
             'json' => 'Json',
         ];
         $this->assertEquals($expected, $viewClass);
 
-        $inputs = $requestHandler->config('inputTypeMap');
+        $inputs = $requestHandler->getConfig('inputTypeMap');
         $this->assertArrayHasKey('json', $inputs);
         $this->assertCount(1, $inputs);
     }
