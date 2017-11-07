@@ -27,6 +27,12 @@ use Cake\Http\Cookie\CookieInterface;
 class CookieCollection extends BaseCollection
 {
 
+    public function __construct(array $cookies = []) {
+        parent::__construct($cookies);
+
+        deprecationWarning('Use Cake\Http\Cookie\CookieCollection instead.');
+    }
+
     /**
      * Store the cookies from a response.
      *
